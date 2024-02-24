@@ -1,0 +1,18 @@
+{
+  "required": true,
+  "package": "dev.xlfrie.mixin.client",
+  "compatibilityLevel": "JAVA_17",
+  "client": [
+    "ClientNetworkMixin",
+    "EntityMixin",
+    "EntityRenderDispatcherMixin",
+    "ParticleManagerMixin",
+    "PowderSnowBlockMixin",
+    "LivingEntityMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "mixins": [
+  ]
+}
