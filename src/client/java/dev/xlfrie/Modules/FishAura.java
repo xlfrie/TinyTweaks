@@ -1,21 +1,24 @@
 package dev.xlfrie.Modules;
 
 import com.google.common.collect.Multimap;
+import dev.xlfrie.Utils.Misc;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityGroup;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.passive.SalmonEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Hand;
-import net.minecraft.util.TypeFilter;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import org.lwjgl.glfw.GLFW;
 
+import java.lang.reflect.Field;
 import java.util.List;
 
 import static dev.xlfrie.TinyTweaksClient.LOGGER;
@@ -52,9 +55,10 @@ public class FishAura extends ModuleBase {
 
         float g = EnchantmentHelper.getAttackDamage(client.player.getMainHandStack(), EntityGroup.AQUATIC);
 //        Check desmos
-        float h = (float) ((-(0.16 * f + g) + Math.sqrt((0.16 * f + g) * (0.16 * f + g) + (9.6 * f))) / (1.6 * f));
+        float damage = 3F;
+        float h = (float) (Math.sqrt(-4F * 0.8 * f * (0.2 * f - damage)) / (2F * 0.8 * f));
 
-        if (client.player.getAttackCooldownProgress(0.5f) >= h) {
+        if (client.player.getAttackCooldownProgress(0.5f)*20-0.5 >= 9) {
             Vec3d pos = client.player.getPos();
             List<SalmonEntity> nearby =
                     client.world.getEntitiesByType(EntityType.SALMON, new Box(new Vec3d(pos.getX() - 3, pos.getY() - 3, pos.getZ() - 3), new Vec3d(pos.getX() + 3, pos.getY() + 3, pos.getZ() + 3)), (entity) -> !(pos.squaredDistanceTo(entity.getPos()) > 25));
@@ -64,6 +68,7 @@ public class FishAura extends ModuleBase {
                     if (++i >= nearby.size())
                         return;
                 }
+
                 clientPlayerInteractionManager.attackEntity(client.player,
                         nearby.get(i));
                 client.player.swingHand(Hand.MAIN_HAND);

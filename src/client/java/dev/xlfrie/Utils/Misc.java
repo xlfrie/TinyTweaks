@@ -20,13 +20,14 @@ public class Misc {
     public static <T> T getPrivate(Object obj, String mappedFieldName, String intermediaryFieldName) {
         Class<?> clazz = obj.getClass();
         Field field;
+
         try {
-            field = clazz.getDeclaredField(mappedFieldName);
+            field = clazz.getField(mappedFieldName);
         } catch (NoSuchFieldException e) {
             try {
-                field = clazz.getDeclaredField(intermediaryFieldName);
+                field = clazz.getField(intermediaryFieldName);
             } catch (NoSuchFieldException ex) {
-                throw new RuntimeException(ex);
+                return null;
             }
         }
         field.setAccessible(true);
